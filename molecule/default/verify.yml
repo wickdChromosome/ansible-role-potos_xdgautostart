@@ -1,0 +1,26 @@
+---
+
+- name: Verify
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: import vars used in the role defaults for testing
+      ansible.builtin.include_vars:
+        dir: "../../defaults"
+
+    - name: check if template for pulseaudio volume set script has been applied
+      ansible.builtin.stat:
+        path: "/etc/xdg/autostart/potos_pulseaudio.desktop"
+      register: out
+      changed_when: false
+      failed_when:
+        - not out.stat.exists
+
+    - name: check if template for gnome autostart script has been applied
+      ansible.builtin.stat:
+        path: "/usr/local/bin/potos-pulseconfig.sh"
+      register: out
+      changed_when: false
+      failed_when:
+        - not out.stat.exists

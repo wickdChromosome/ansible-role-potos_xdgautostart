@@ -1,0 +1,35 @@
+---
+
+# Loop over all script names
+- name: Copy over the desktop file to the new dir
+  ansible.builtin.template:
+    src: "templates/etc/xdg/autostart/desktopfile.j2"
+    dest: "/etc/xdg/autostart/{{ item | basename }}.desktop"
+    force: yes
+    mode: '0777'
+  loop: "{{ login_run_once_scripts }}"
+
+# Copy over script file to global autostart dir
+- name: Copy over the script file to the new dir
+  ansible.builtin.template:
+    src: "templates/{{ item }}"
+    dest: "/usr/local/bin/{{ item | basename }}"
+    force: yes
+    mode: '0777'
+  loop: "{{ login_run_once_scripts }}"
+
+# Append disable script to each copied over script
+- name: Copy over sound setting script
+  ansible.builtin.slurp:
+    src: "files/disable_script.j2"
+  register: disable_script_content
+
+# Append disable script to each copied over script
+- name: Copy over sound setting script
+  ansible.builtin.lineinfile:
+    path: "/usr/local/bin/{{ item | basename }}"
+    insertafter: EOF
+    line: "{{ disable_script_content | b64decode }}"
+  loop: "{{ login_run_once_scripts }}"
+
+
