@@ -1,22 +1,32 @@
 ---
 
+# If list is explicitly defined to be empty, quit
 # Loop over all script names
 - name: Copy over the desktop file to the new dir
   ansible.builtin.template:
     src: "templates/etc/xdg/autostart/desktopfile.j2"
-    dest: "/etc/xdg/autostart/{{ item | basename }}.desktop"
+    dest: "/etc/xdg/autostart/{{ item.script | basename }}.desktop"
     force: yes
     mode: '0777'
-  loop: "{{ login_run_once_scripts }}"
+  loop: "{{ potos_xdg_autostart }}"
+
+# Loop over all script names
+- name: Copy over the desktop file to the new dir
+  ansible.builtin.template:
+    src: "templates/etc/xdg/autostart/desktopfile.j2"
+    dest: "/etc/xdg/autostart/{{ item.script | basename }}.desktop"
+    force: yes
+    mode: '0777'
+  loop: "{{ potos_xdg_autostart }}"
 
 # Copy over script file to global autostart dir
 - name: Copy over the script file to the new dir
   ansible.builtin.template:
-    src: "templates/{{ item }}"
-    dest: "/usr/local/bin/{{ item | basename }}"
+    src: "templates/{{ item.script }}"
+    dest: "/usr/local/bin/{{ item.script | basename }}"
     force: yes
     mode: '0777'
-  loop: "{{ login_run_once_scripts }}"
+  loop: "{{ potos_xdg_autostart }}"
 
 # Append disable script to each copied over script
 - name: Copy over sound setting script
@@ -27,9 +37,10 @@
 # Append disable script to each copied over script
 - name: Copy over sound setting script
   ansible.builtin.lineinfile:
-    path: "/usr/local/bin/{{ item | basename }}"
+    path: "/usr/local/bin/{{ item.script | basename }}"
     insertafter: EOF
     line: "{{ disable_script_content | b64decode }}"
-  loop: "{{ login_run_once_scripts }}"
+  loop: "{{ potos_xdg_autostart }}"
+  when: item.runonlyonce
 
 
