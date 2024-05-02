@@ -2,6 +2,6 @@
 Type=Application
 Name=Potos pulseaudio script
 Comment=Script for overriding default volume on first login for user
-Exec=/usr/local/bin/{{ item.script }}
+Exec=/usr/local/bin/{{ item.script }}_wrapper.sh
 X-GNOME-AutoRestart=false
 X-GNOME-Autostart-enabled=true
