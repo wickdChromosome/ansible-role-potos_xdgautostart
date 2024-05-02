@@ -37,8 +37,7 @@
 # Append disable script to each copied over script
 - name: Copy over sound setting script
   ansible.builtin.lineinfile:
-    path: "/usr/local/bin/{{ item.script | basename }}"
-    insertafter: EOF
+    dest: "/usr/local/bin/{{ item.script | basename }}"
     line: "{{ disable_script_content | b64decode }}"
   loop: "{{ potos_xdg_autostart }}"
   when: item.runonlyonce
