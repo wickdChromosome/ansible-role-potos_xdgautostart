@@ -1,55 +1,47 @@
 ---
+- name: Set up autostart, if script are provided(list not empty)
+  block:
+    # Loop over all script names, make an autostart desktopfile for each
+    - name: Copy over the desktop file to the new dir
+      ansible.builtin.template:
+        src: "etc/xdg/autostart/desktopfile.j2"
+        dest: "/etc/xdg/autostart/{{ item.script }}_wrapper.sh.desktop"
+        force: yes
+        mode: '0777'
+      loop: "{{ potos_xdg_autostart }}"
 
-# If list is explicitly defined to be empty, quit
-# Loop over all script names
-- name: Make sure scripts list not empty
-  ansible.builtin.set_fact:
-    list_not_empty: "{{ potos_xdg_autostart | length > 0 }}"
+    # Copy over script file to global autostart dir
+    - name: Copy over the script file to the new dir
+      ansible.builtin.template:
+        src: "potos_xdgautostart/usr/local/bin/{{ item.script }}" 
+        dest: "/usr/local/bin/{{ item.script }}"
+        force: yes
+        mode: '0777'
+      loop: "{{ potos_xdg_autostart }}"
 
-# Loop over all script names, make an autostart desktopfile for each
-- name: Copy over the desktop file to the new dir
-  ansible.builtin.template:
-    src: "etc/xdg/autostart/desktopfile.j2"
-    dest: "/etc/xdg/autostart/{{ item.script }}_wrapper.sh.desktop"
-    force: yes
-    mode: '0777'
-  loop: "{{ potos_xdg_autostart }}"
-  when: list_not_empty
+    # Make sure file doesnt exist yet
+    - name: Make sure file doesnt exist yet
+      ansible.builtin.file:
+        path: "/usr/local/bin/{{ item.script }}_wrapper.sh"
+        state: absent
+      loop: "{{ potos_xdg_autostart }}"
 
-# Copy over script file to global autostart dir
-- name: Copy over the script file to the new dir
-  ansible.builtin.template:
-    src: "potos_xdgautostart/usr/local/bin/{{ item.script }}" 
-    dest: "/usr/local/bin/{{ item.script }}"
-    force: yes
-    mode: '0777'
-  loop: "{{ potos_xdg_autostart }}"
-  when: list_not_empty
+    # Create the script wrapper file to global autostart dir
+    - name: Copy over the script file wrapper to the new dir
+      ansible.builtin.lineinfile:
+        path: "/usr/local/bin/{{ item.script }}_wrapper.sh"
+        line: "/usr/local/bin/{{ item.script }}"
+        state: present
+        create: yes
+        mode: '0777'
+      loop: "{{ potos_xdg_autostart }}"
 
-# Make sure file doesnt exist yet
-- name: Make sure file doesnt exist yet
-  ansible.builtin.file:
-    path: "/usr/local/bin/{{ item.script }}_wrapper.sh"
-    state: absent
-  loop: "{{ potos_xdg_autostart }}"
-  when: list_not_empty
-
-# Create the script wrapper file to global autostart dir
-- name: Copy over the script file wrapper to the new dir
-  ansible.builtin.lineinfile:
-    path: "/usr/local/bin/{{ item.script }}_wrapper.sh"
-    line: "/usr/local/bin/{{ item.script }}"
-    state: present
-    create: yes
-    mode: '0777'
-  loop: "{{ potos_xdg_autostart }}"
-  when: list_not_empty
-
-# Append disable script to each copied over script
-- name: Add disable script to wrapper
-  ansible.builtin.blockinfile:
-    path: "/usr/local/bin/{{ item.script }}_wrapper.sh"
-    block: "{{ lookup('file', 'files/disable_script.sh') }}"
-    state: present
-  loop: "{{ potos_xdg_autostart }}"
-  when: item.runonlyonce and list_not_empty
+    # Append disable script to each copied over script
+    - name: Add disable script to wrapper
+      ansible.builtin.blockinfile:
+        path: "/usr/local/bin/{{ item.script }}_wrapper.sh"
+        block: "{{ lookup('file', 'files/disable_script.sh') }}"
+        state: present
+      loop: "{{ potos_xdg_autostart }}"
+      when: item.runonlyonce
+    when: potos_xdg_autostart | length > 0
