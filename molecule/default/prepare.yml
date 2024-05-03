@@ -5,16 +5,21 @@
   gather_facts: yes
 
   tasks:
-    # Update the apt cache as it's potentially outdated in the container
-    - name: update apt
+    #    # Update the apt cache as it's potentially outdated in the container
+    #    - name: update apt
+    #      ansible.builtin.shell:  # noqa: command-instead-of-module
+    #        cmd: 'apt-get update && apt-get upgrade -y'
+    #      when: ansible_distribution == 'Ubuntu'
+    #      changed_when: false
+    #    - name: install gnome
+    #      ansible.builtin.apt:
+    #        name: '{{ item }}'
+    #        state: present
+    #      loop:
+    #        - 'gnome-session'
+    #        - 'gdm3'
+    - name: Make directory for gnome autostart script(w/o installing gnome)
       ansible.builtin.shell:  # noqa: command-instead-of-module
-        cmd: 'apt-get update && apt-get upgrade -y'
-      when: ansible_distribution == 'Ubuntu'
+        cmd: 'mkdir -p /etc/xdg/autostart'
       changed_when: false
-    - name: install gnome
-      ansible.builtin.apt:
-        name: '{{ item }}'
-        state: present
-      loop:
-        - 'gnome-session'
-        - 'gdm3'
+

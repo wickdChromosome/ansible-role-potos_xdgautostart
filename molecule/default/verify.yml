@@ -3,24 +3,66 @@
 - name: Verify
   hosts: all
   gather_facts: no
-
+  vars: []
   tasks:
-    - name: import vars used in the role defaults for testing
-      ansible.builtin.include_vars:
-        dir: "../../defaults"
-
-    - name: check if template for pulseaudio volume set script has been applied
+    # test templates
+    - name: check if template for script desktop file has been applied
       ansible.builtin.stat:
-        path: "/etc/xdg/autostart/potos_pulseaudio.desktop"
+        path: "/etc/xdg/autostart/test_1.sh_wrapper.sh.desktop"
       register: out
-      changed_when: false
       failed_when:
         - not out.stat.exists
 
-    - name: check if template for gnome autostart script has been applied
+    - name: check if template for script has been applied
       ansible.builtin.stat:
-        path: "/usr/local/bin/potos-pulseconfig.sh"
+        path: "/usr/local/bin/test_1.sh"
       register: out
-      changed_when: false
       failed_when:
         - not out.stat.exists
+
+    - name: check if template for wrapper script has been applied
+      ansible.builtin.stat:
+        path: "/usr/local/bin/test_1.sh_wrapper.sh"
+      register: out
+      failed_when:
+        - not out.stat.exists
+
+    # test that the wrapper doesn't have disable lines when it shouldn't(if the script is set to run on every login)
+    - name: check that the test case where runonlyonce is true does have the disable script
+      ansible.builtin.lineinfile:
+        path: "/usr/local/bin/test_1.sh_wrapper.sh"
+        line: "# BEGIN ANSIBLE MANAGED BLOCK"
+        state: present
+      register: out
+      failed_when:
+        - out.changed
+
+    - name: check that the test case where runonlyonce is false doesnt have the disable script
+      ansible.builtin.lineinfile:
+        path: "/usr/local/bin/test_2.sh_wrapper.sh"
+        line: "BEGIN ANSIBLE MANAGED BLOCK"
+        state: absent
+      register: out
+      failed_when:
+        - out.changed
+
+    # test that the desktop file points to the correct wrapper script
+    - name: test that the desktop file points to the correct wrapper script 
+      ansible.builtin.lineinfile:
+        path: "/etc/xdg/autostart/test_2.sh_wrapper.sh.desktop"
+        line: "Exec=/usr/local/bin/test_2.sh_wrapper.sh"
+        state: present
+      register: out
+      failed_when:
+        - out.changed
+
+    # test that the wrapper script points to the correct path for the main script it wraps
+    - name: test that the wrapper script points to the correct path for the main script it wraps 
+      ansible.builtin.lineinfile:
+        path: "/etc/xdg/autostart/test_2.sh_wrapper"
+        line: "/usr/local/bin/test_2.sh"
+        state: present
+      register: out
+      failed_when:
+        - out.changed
+

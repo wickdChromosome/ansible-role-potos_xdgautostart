@@ -3,8 +3,17 @@
 - name: Converge
   hosts: all
   gather_facts: yes
-  vars: {}
+  vars:     
+    potos_xdg_autostart:
+        - script: "test_1.sh"
+          runonlyonce: yes
+        - script: "test_2.sh"
+          runonlyonce: no
+
+    potos_xdg_autostart_empty: []
+
   tasks:
     - name: run role
       ansible.builtin.include_role:
-        name: 'ansible-role-potos_pulseaudio'
+        name: 'ansible-role-potos_xdgautostart'
+
