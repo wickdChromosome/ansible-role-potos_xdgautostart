@@ -44,4 +44,4 @@
         state: present
       loop: "{{ potos_xdg_autostart }}"
       when: item.runonlyonce
-    when: potos_xdg_autostart | length > 0
+  when: potos_xdg_autostart | length > 0
