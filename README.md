@@ -16,12 +16,13 @@ If the role is only imported into the specs repo, but not configured with vars, 
 As an example, to configure the role to run test_1.sh once for each user when they log in, and test_2.sh to run for each user every time they log in and never get disabled, you can set the potos_xdgautostart var up as given under the vars section. 
 
 ## Vars
+Here, after importing the role in the specs repo:
 ```
-- potos_xdgautostart:
-    - script: "test_1.sh"
-      runonlyonce: yes
-    - script: "test_2.sh"
-      runonlyonce: no
+- potos_xdgautostart: # List of scripts to autostart
+    - script: "test_1.sh" # Name of script to run on user login(stored in files/potos_xdgautostart for specs repo)
+      runonlyonce: yes # For each user, run the script once and only once on first login
+    - script: "test_2.sh" 
+      runonlyonce: no # For each user, run the script on every login
 ```
 ## License
 
