@@ -8,12 +8,25 @@ A key feature is to only run the script once. So the first time the user logs in
 # A picture is worth a thousand words
 ![Role chart](role.png)
 
-## Quickstart
 This role is supposed to be imported into the specs repo, and configured in the specs repo's vars/ directory.
 
-If the role is only imported into the specs repo, but not configured with vars, it will deploy a script which sets the volume of the default sound sink to ~80% using pulseaudio.
+## Quickstart
 
-As an example, to configure the role to run test_1.sh once for each user when they log in, and test_2.sh to run for each user every time they log in and never get disabled, you can set the potos_xdgautostart var up as given under the vars section. 
+If the role is only imported into the specs repo, but not configured with vars, it will deploy a script which sets the volume of the default sound sink to ~80% using pulseaudio.
+To get started asap, import the role in the specs repo(files/templates/requirements.yml.j2):
+```
+- name: xdgautostart
+  src: git+https://github.com/wickdChromosome/ansible-role-potos_xdgautostart.git
+  version: 'master'
+```
+
+Now do an ansible-pull. In var/log/potos/ansible.log, you should be able to see the pulseaudio script being deployed.
+
+In `/usr/local/bin`, you should be able to see `pulseaudio-example.sh-wrapper.sh` and `pulseaudio-example.sh`. 
+
+In `/etc/xdg/autostart` you will find pulseaudio-example.sh-wrapper.sh.desktop.
+
+After logout and login, if runonlyonce is set(by default it is for this example), you will find `~/.config/autotart/pulseaudio-example.sh-rapper.sh.desktop` as well, where autorun is disabled for the user you are logged in under for this script.
 
 ## Vars
 Here, after importing the role in the specs repo:
@@ -24,6 +37,7 @@ Here, after importing the role in the specs repo:
     - script: "test_2.sh" 
       runonlyonce: no # For each user, run the script on every login
 ```
+
 ## License
 
 See [LICENSE](./LICENSE)
