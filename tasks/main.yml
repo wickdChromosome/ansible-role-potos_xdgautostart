@@ -1,5 +1,6 @@
 ---
 - name: Set up autostart, if script are provided(list not empty)
+  when: potos_xdg_autostart | length > 0
   block:
     # Loop over all script names, make an autostart desktopfile for each
     - name: Copy over the desktop file to the new dir
@@ -39,4 +40,3 @@
         state: present
       loop: "{{ potos_xdg_autostart }}"
       when: item.runonlyonce
-  when: potos_xdg_autostart | length > 0

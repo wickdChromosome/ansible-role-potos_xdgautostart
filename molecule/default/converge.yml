@@ -2,8 +2,8 @@
 
 - name: Converge
   hosts: all
-  gather_facts: yes
-  vars:     
+  gather_facts: true
+  vars:
     potos_xdg_autostart:
       - script: "test_1.sh"
         runonlyonce: true

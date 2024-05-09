@@ -6,6 +6,5 @@
 
   tasks:
     - name: Make directory for gnome autostart script(w/o installing gnome)
-      ansible.builtin.shell:  # noqa: command-instead-of-module
-        cmd: 'mkdir -p /etc/xdg/autostart'
       changed_when: false
+      ansible.builtin.command: 'mkdir -p /etc/xdg/autostart' # noqa: command-instead-of-module
