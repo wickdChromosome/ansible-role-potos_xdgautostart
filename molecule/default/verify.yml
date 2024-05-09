@@ -2,8 +2,7 @@
 
 - name: Verify
   hosts: all
-  gather_facts: no
-  vars: []
+  gather_facts: false
   tasks:
     # test templates
     - name: Check if template for script desktop file has been applied

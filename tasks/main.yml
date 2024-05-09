@@ -13,7 +13,7 @@
     # Copy over script file to global autostart dir
     - name: Copy over the script file to the new dir
       ansible.builtin.template:
-        src: "potos_xdgautostart/usr/local/bin/{{ item.script }}" 
+        src: "potos_xdgautostart/usr/local/bin/{{ item.script }}"
         dest: "/usr/local/bin/{{ item.script }}"
         force: true
         mode: '0777'
@@ -26,7 +26,7 @@
         line: "/usr/local/bin/{{ item.script }}"
         regexp: "^/usr/local/bin/{{ item.script }}$"
         state: present
-        backup: no
+        backup: false
         create: true
         mode: '0777'
       loop: "{{ potos_xdg_autostart }}"

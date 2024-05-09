@@ -8,12 +8,12 @@ argument_specs:
         description:
           - Example variable
         type: str
-        required: no
+        required: false
         default: 'hello world!'
       potos_template_example_list:
         description:
           - List of items used for action xyz
         type: list
         elements: str
-        required: no
+        required: false
         default: []

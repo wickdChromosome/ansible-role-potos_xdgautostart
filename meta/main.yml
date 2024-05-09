@@ -2,9 +2,9 @@
 
 galaxy_info:
   author: Project Potos
-  description: ole to use as template for new roles of Potos Linux Clients.
+  description: Role to use as a way to auto-execute on scripts on login
   company: Project Potos
-  role_name: potos_wallpaper
+  role_name: potos_xdgautostart
   namespace: projectpotos
   license: GPL-3.0-only
   min_ansible_version: '2.12'
