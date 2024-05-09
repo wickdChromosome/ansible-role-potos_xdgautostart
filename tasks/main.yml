@@ -6,7 +6,7 @@
       ansible.builtin.template:
         src: "etc/xdg/autostart/desktopfile.j2"
         dest: "/etc/xdg/autostart/{{ item.script }}_wrapper.sh.desktop"
-        force: yes
+        force: true
         mode: '0777'
       loop: "{{ potos_xdg_autostart }}"
 
@@ -15,7 +15,7 @@
       ansible.builtin.template:
         src: "potos_xdgautostart/usr/local/bin/{{ item.script }}" 
         dest: "/usr/local/bin/{{ item.script }}"
-        force: yes
+        force: true
         mode: '0777'
       loop: "{{ potos_xdg_autostart }}"
 
@@ -27,7 +27,7 @@
         regexp: "^/usr/local/bin/{{ item.script }}$"
         state: present
         backup: no
-        create: yes
+        create: true
         mode: '0777'
       loop: "{{ potos_xdg_autostart }}"
 
