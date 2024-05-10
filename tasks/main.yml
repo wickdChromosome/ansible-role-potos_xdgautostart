@@ -21,6 +21,15 @@
       loop: "{{ potos_xdg_autostart }}"
       failed_when: false
 
+    # Check to make sure target script file is on the remote host,
+    # either because it was copied over or it was already there
+    - name: Make sure target script file is present
+      ansible.builtin.stat:
+        path: "/usr/local/bin/{{ item.script }}"
+      register: file_stat
+      failed_when: not file_stat.stat.exists
+      loop: "{{ potos_xdg_autostart }}"
+
     # Create the script wrapper file to global autostart dir
     - name: Copy over the script file wrapper to the new dir
       ansible.builtin.lineinfile:
