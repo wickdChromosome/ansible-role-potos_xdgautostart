@@ -1,5 +1,6 @@
 ---
 - name: Set up autostart, if script are provided(list not empty)
+  gather_facts: false
   when: potos_xdg_autostart | length > 0
   block:
     # Loop over all script names, make an autostart desktopfile for each
