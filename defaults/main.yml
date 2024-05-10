@@ -2,7 +2,7 @@
 
 # Int between 0 and 65536(0-100%), for setting
 # PulseAudio default volume
-potos_pulseaudio_default_volume: 50000
 potos_xdg_autostart:
   - script: "/usr/local/bin/pulseaudio_example.sh"
     runonlyonce: true
+    potos_pulseaudio_default_volume: 50000
