@@ -13,6 +13,13 @@
     potos_xdg_autostart_empty: []
 
   tasks:
+
+    - name: Setup files for testing
+      ansible.builtin.debug:
+        var: "{{ item }}"
+      with_fileglob:
+        - "{{ playbook_dir }}/../files/potos_xdgautostart/usr/local/bin/*"
+
     - name: Run role
       ansible.builtin.include_role:
         name: 'ansible-role-potos_xdgautostart'
