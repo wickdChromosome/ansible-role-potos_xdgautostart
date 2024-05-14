@@ -8,9 +8,6 @@ argument_specs:
         description:
           - List of scripts for deployment
         type: list
-        elements: str, bool
+        elements: dict
         required: false
-        default:
-          - script: "/usr/local/bin/pulseaudio_example.sh"
-            runonlyonce: true
-            potos_pulseaudio_default_volume: 50000
+        default: []
