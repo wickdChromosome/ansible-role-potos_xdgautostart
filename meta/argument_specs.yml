@@ -2,18 +2,15 @@
 
 argument_specs:
   main:
-    short_description: Role to use as template for new roles of Potos Linux Clients.
+    short_description: Role to use to run scripts automatically on user login, either once or recurringly
     options:
-      potos_template_example_var:
+      potos_xdg_autostart:
         description:
-          - Example variable
-        type: str
-        required: false
-        default: 'hello world!'
-      potos_template_example_list:
-        description:
-          - List of items used for action xyz
+          - List of scripts for deployment
         type: list
-        elements: str
+        elements: str, bool
         required: false
-        default: []
+        default:
+          - script: "/usr/local/bin/pulseaudio_example.sh"
+            runonlyonce: true
+            potos_pulseaudio_default_volume: 50000
