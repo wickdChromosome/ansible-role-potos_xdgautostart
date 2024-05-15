@@ -5,12 +5,10 @@
   gather_facts: true
   vars:
     potos_xdg_autostart:
-      - script: "test_1.sh"
+      - script: "test_1.sh.j2"
         runonlyonce: true
-      - script: "test_2.sh"
+      - script: "test_2.sh.j2"
         runonlyonce: false
-
-    potos_xdg_autostart_empty: []
 
   tasks:
 
