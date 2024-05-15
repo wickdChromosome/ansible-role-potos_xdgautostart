@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Name=Potos autostart script for {{ item.script | replace('.j2','') }}}}
+Name=Potos autostart script for {{ item.script | replace('.j2','') }}
 Comment=Potos autostart script for {{ item.script | replace('.j2','') }}
 Exec=/usr/local/bin/{{ item.script | replace('.j2','') }}_wrapper.sh
 X-GNOME-AutoRestart=false
