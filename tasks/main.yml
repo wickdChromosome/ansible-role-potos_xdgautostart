@@ -3,7 +3,7 @@
 # Loop over all script names, make an autostart desktopfile for each
 - name: Copy over the desktop file to the new dir
   ansible.builtin.template:
-    src: "etc/xdg/autostart/desktopfile.j2"
+    src: "potos_xdgautostart/etc/xdg/autostart/desktopfile.j2"
     dest: "/etc/xdg/autostart/{{ item.script | replace('.j2','') }}_wrapper.sh.desktop"
     force: true
     mode: '0777'
