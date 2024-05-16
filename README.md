@@ -26,16 +26,16 @@ In `/usr/local/bin`, you should be able to see `pulseaudio-example.sh-wrapper.sh
 
 In `/etc/xdg/autostart` you will find pulseaudio-example.sh-wrapper.sh.desktop.
 
-After logout and login, if runonlyonce is set(by default it is for this example), you will find `~/.config/autotart/pulseaudio-example.sh-rapper.sh.desktop` as well, where autorun is disabled for the user you are logged in under for this script.
+After logout and login, if runonlyonce is set(by default it is for this example), you will find `~/.config/autostart/pulseaudio-example.sh-rapper.sh.desktop` as well, where autorun is disabled for the user you are logged in under for this script.
 
 ## Vars
 Here, after importing the role in the specs repo:
 ```
 - potos_xdgautostart: # List of scripts to autostart
-    - script: "test_1.sh" # Name of script to run on user login(stored in files/potos_xdgautostart for specs repo)
+    - script: "test_1.sh.j2" # Name of script to run on user login(stored in files/potos_xdgautostart for specs repo)
       runonlyonce: yes # For each user, run the script once and only once on first login
-      my_var_to_template: "1245" # If test_1.sh has $my_var_to_template, it can be templated as {{ item.my_var_to_template }} in test_1.sh
-    - script: "test_2.sh" 
+      my_var_to_template: "1245" # If test_1.sh.j2 has $my_var_to_template, it can be templated as {{ item.my_var_to_template }} in test_1.sh.j2
+    - script: "test_2.sh.j2" 
       runonlyonce: no # For each user, run the script on every login
 ```
 
