@@ -26,7 +26,14 @@ In `/usr/local/bin`, you should be able to see `pulseaudio-example.sh-wrapper.sh
 
 In `/etc/xdg/autostart` you will find pulseaudio-example.sh-wrapper.sh.desktop.
 
-After logout and login, if runonlyonce is set(by default it is for this example), you will find `~/.config/autostart/pulseaudio-example.sh-rapper.sh.desktop` as well, where autorun is disabled for the user you are logged in under for this script.
+After logout and login, if runonlyonce is set(by default it is for this example), you will find `~/.config/autostart/pulseaudio-example.sh-wrapper.sh.desktop` as well, where autorun is disabled for the user you are logged in under for this script.
+
+## If the script is already on the remote host
+Existing script automation(maybe deployed by another role under /usr/local/bin) is also supported.
+However, in that case the potos_xdgautostart list should refer to the script as $deployed_script + .j2
+
+For example, if the script is under `/usr/local/bin/example.sh`, the script should be present in the list as `script: "example.sh.j2"`, even
+if there is no existing .j2 template for the script.
 
 ## Vars
 Here, after importing the role in the specs repo:
@@ -38,6 +45,9 @@ Here, after importing the role in the specs repo:
     - script: "test_2.sh.j2" 
       runonlyonce: no # For each user, run the script on every login
 ```
+
+## Requirements
+The script specified to be deployed must exist either under templates/ as specified, or on the remote host already deployed. 
 
 ## License
 
